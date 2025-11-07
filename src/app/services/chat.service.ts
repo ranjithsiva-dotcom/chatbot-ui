@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
+import { environment } from '../../environments/environment'; // adjust path if needed
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +10,12 @@ export class ChatService {
   private socket: Socket;
 
   constructor() {
-    // Connect to backend Socket.IO server
-    this.socket = io('http://localhost:5000', {
-      transports: ['websocket'],
+    this.socket = io(environment.socketUrl, {
+      transports: ['websocket', 'polling'], // allow fallback for some hosts
       reconnectionAttempts: 5,
-      timeout: 20000
+      timeout: 20000,
+      withCredentials: false,               // CORS-friendly
+      path: '/socket.io'                    // default path (explicit)
     });
   }
 
@@ -22,8 +24,8 @@ export class ChatService {
   }
 
   getMessages(): Observable<any> {
-    return new Observable((observer) => {
-      this.socket.on('receiveMessage', (data) => observer.next(data));
+    return new Observable(observer => {
+      this.socket.on('receiveMessage', data => observer.next(data));
     });
   }
 
@@ -32,8 +34,8 @@ export class ChatService {
   }
 
   getAnswers(): Observable<any> {
-    return new Observable((observer) => {
-      this.socket.on('answer', (data) => observer.next(data));
+    return new Observable(observer => {
+      this.socket.on('answer', data => observer.next(data));
     });
   }
 }
