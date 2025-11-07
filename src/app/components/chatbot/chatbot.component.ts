@@ -14,13 +14,14 @@ interface ChatMessage {
   styleUrls: ['./chatbot.component.css']
 })
 export class ChatbotComponent implements OnInit {
-  message: string = '';
+  message = '';
   messages: ChatMessage[] = [];
+  uploaded = false; // optional status only
 
   constructor(private chatService: ChatService) {}
 
   ngOnInit(): void {
-    // Listen for messages from backend
+    // Backend messages (greetings / general responses)
     this.chatService.getMessages().subscribe((msg: any) => {
       const displayMsg = typeof msg === 'object' ? JSON.stringify(msg, null, 2) : msg;
       this.messages.push({
@@ -31,17 +32,18 @@ export class ChatbotComponent implements OnInit {
       });
     });
 
-    // Listen for chatbot answers
+    // Answers stream
     this.chatService.getAnswers().subscribe((data) => {
       this.messages.push({
         author: 'Chatbot',
-        message: data.answer || data,
+        message: data?.answer ?? data,
         timestamp: new Date(),
         avatar: 'https://randomuser.me/api/portraits/lego/2.jpg'
       });
     });
   }
 
+  // Send text to backend (works with or without uploaded PDF)
   sendMsg(): void {
     if (!this.message.trim()) return;
 
@@ -52,8 +54,41 @@ export class ChatbotComponent implements OnInit {
       avatar: 'https://randomuser.me/api/portraits/lego/1.jpg'
     });
 
-    // Send to backend
     this.chatService.sendMessage(this.message);
     this.message = '';
+  }
+
+  // Optional upload handler
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      alert('Please select a PDF file.');
+      return;
+    }
+
+    this.chatService.uploadPdf(file).subscribe({
+      next: () => {
+        this.uploaded = true;
+        this.messages.push({
+          author: 'Chatbot',
+          message: 'PDF uploaded successfully! I will use it when relevant.',
+          timestamp: new Date(),
+          avatar: 'https://randomuser.me/api/portraits/lego/2.jpg'
+        });
+      },
+      error: (err) => {
+        console.error('Upload failed:', err);
+        this.uploaded = false;
+        this.messages.push({
+          author: 'Chatbot',
+          message: 'Upload failed. I will answer generally until a PDF is uploaded.',
+          timestamp: new Date(),
+          avatar: 'https://randomuser.me/api/portraits/lego/2.jpg'
+        });
+      }
+    });
   }
 }

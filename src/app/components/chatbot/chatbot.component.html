@@ -1,64 +1,71 @@
-<!-- Grey Header -->
-<header style="background-color: #e0e0e0; padding: 10px; text-align: center;">
-  <h2 style="margin: 0; color: #333;">My Chat Application.</h2>
-</header>
+<!-- Page Wrapper -->
+<div class="chat-page">
+  <header class="chat-header">
+    <h2>ChatDocs — Smart Document Assistant</h2>
+  </header>
 
-<!-- Centered Chat Card -->
-<div class="d-flex justify-content-center align-items-center" style="height: 90vh;">
-  <div class="card direct-chat direct-chat-warning" style="width: 400px;">
-    
-    <!-- Card Header -->
-    <div class="card-header">
-      <h3 class="card-title">Org. Chat</h3>
-      <div class="card-tools">
-        <span title="New Messages" class="badge badge-warning">{{ messages.length }}</span>
-        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-          <i class="fas fa-minus"></i>
-        </button>
-        <button type="button" class="btn btn-tool" data-widget="chat-pane-toggle">
-          <i class="fas fa-comments"></i>
-        </button>
-        <button type="button" class="btn btn-tool" data-card-widget="remove">
-          <i class="fas fa-times"></i>
-        </button>
+  <main class="chat-container">
+    <section class="chat-card direct-chat direct-chat-warning shadow-lg">
+      <!-- Card Header -->
+      <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+        <h3 class="card-title m-0">Ask. Learn. Chat with your Documents.</h3>
+        <div class="card-tools">
+          <span title="New Messages" class="badge badge-light text-dark">{{ messages.length }}</span>
+          <button type="button" class="btn btn-tool text-dark"><i class="fas fa-minus"></i></button>
+          <button type="button" class="btn btn-tool text-dark"><i class="fas fa-comments"></i></button>
+          <button type="button" class="btn btn-tool text-dark"><i class="fas fa-times"></i></button>
+        </div>
       </div>
-    </div>
 
-    <!-- Card Body -->
-    <div class="card-body">
-      <!-- Conversations -->
-      <div class="direct-chat-messages" style="max-height: 400px; overflow-y: auto;">
-        <div *ngFor="let msg of messages" class="direct-chat-msg"
-             [ngClass]="{'right': msg.author === 'You'}">
-          <div class="direct-chat-infos clearfix">
-            <span class="direct-chat-name float-left">{{ msg.author }}</span>
-            <span class="direct-chat-timestamp float-right">
-              {{ msg.timestamp ? (msg.timestamp | date:'short') : '' }}
-            </span>
-          </div>
-          <img class="direct-chat-img"
-               [src]="msg.avatar || 'https://randomuser.me/api/portraits/lego/1.jpg'"
-               alt="User Image">
-          <div class="direct-chat-text">
-            {{ msg.message }}
+      <!-- Card Body -->
+      <div class="card-body chat-body">
+        <div #scrollArea class="direct-chat-messages">
+          <div *ngFor="let msg of messages" class="direct-chat-msg" [ngClass]="{'right': msg.author === 'You'}">
+            <div class="direct-chat-infos clearfix">
+              <span class="direct-chat-name float-left">{{ msg.author }}</span>
+              <span class="direct-chat-timestamp float-right">
+                {{ msg.timestamp ? (msg.timestamp | date:'short') : '' }}
+              </span>
+            </div>
+            <img class="direct-chat-img"
+                 [src]="msg.avatar || 'https://randomuser.me/api/portraits/lego/1.jpg'"
+                 alt="User Image">
+            <div class="direct-chat-text">{{ msg.message }}</div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Card Footer -->
-    <div class="card-footer">
-      <div class="input-group">
-        <input type="text"
-               [(ngModel)]="message"
-               name="message"
-               placeholder="Type Message ..."
-               class="form-control">
-        <div class="input-group-append">
-          <button type="button" class="btn btn-warning" (click)="sendMsg()" [disabled]="!message.trim()">Send</button>
+      <!-- Card Footer -->
+      <div class="card-footer bg-light border-top">
+        <div class="mb-2">
+          <label class="form-label font-weight-bold text-secondary">
+            <i class="fas fa-file-upload mr-1"></i> Upload PDF (optional)
+          </label>
+          <input type="file" accept="application/pdf"
+                 (change)="onFileSelected($event)"
+                 class="form-control-file border p-2 rounded" />
+          <div class="small mt-1" [ngClass]="uploaded ? 'text-success' : 'text-muted'">
+            {{ uploaded ? '✓ PDF uploaded — answers can use your document.'
+                        : 'No PDF uploaded — answering generally.' }}
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text"
+                 [(ngModel)]="message"
+                 name="message"
+                 placeholder="Type Message ..."
+                 class="form-control rounded-pill px-3" />
+          <div class="input-group-append">
+            <button type="button"
+                    class="btn btn-warning rounded-pill px-4 ml-2"
+                    (click)="sendMsg()"
+                    [disabled]="!message.trim()">
+              <i class="fas fa-paper-plane mr-1"></i> Send
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-
-  </div>
+    </section>
+  </main>
 </div>

@@ -6,6 +6,7 @@ import { ChatbotComponent } from './components/chatbot/chatbot.component';
 import { ChatService } from './services/chat.service';
 import { WebsocketService } from './services/websocket.service';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
   { path: '', component: ChatbotComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(routes) // <-- add this
+    RouterModule.forRoot(routes),// <-- add this
+    HttpClientModule
   ],
   providers: [ChatService,WebsocketService],
   bootstrap: [AppComponent]
