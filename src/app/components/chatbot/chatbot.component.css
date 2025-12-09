@@ -1,6 +1,6 @@
 /* Page & header */
 .chat-page {
-  min-height: 100dvh;             /* mobile-safe viewport unit */
+  min-height: 100dvh;
   background: radial-gradient(1200px 600px at 50% -10%, #ffe082 0%, #fff8e1 30%, #fffdf5 80%);
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@
   padding: 16px;
 }
 
-/* Card: responsive width using clamp */
+/* Card */
 .chat-card {
   width: clamp(320px, 92vw, 520px);
   border-radius: 16px;
@@ -36,11 +36,8 @@
   flex-direction: column;
 }
 
-/* Header strip already styled via Bootstrap classes */
-
 /* Scrollable body */
 .chat-body {
-  /* Height adapts to screen: 55vh on phones, 60vh on larger screens */
   --body-h: 55vh;
   height: var(--body-h);
   background: #fafafa;
@@ -53,20 +50,22 @@
   .chat-body { --body-h: 60vh; }
 }
 
-/* The scroller area */
+/* Message area */
 .direct-chat-messages {
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch; /* smooth on iOS */
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-right: 6px; /* space for scrollbar */
+  padding-right: 6px;
 }
 
 /* Messages */
-.direct-chat-msg { animation: fadeIn .25s ease; }
+.direct-chat-msg {
+  animation: fadeIn .25s ease;
+}
 
 .direct-chat-text {
   background: #f1f1f1;
@@ -78,6 +77,8 @@
   line-height: 1.45;
   font-size: .95rem;
   color: #333;
+  /* IMPORTANT: show every bullet/number on new line */
+  white-space: pre-line;
 }
 
 .direct-chat-msg.right .direct-chat-text {
@@ -111,6 +112,7 @@
   border: 1px solid #ccc;
   border-radius: 20px;
 }
+
 .input-group .form-control:focus {
   border-color: #ffc107;
   box-shadow: 0 0 0 3px rgba(255,193,7,.25);
@@ -119,6 +121,7 @@
 .btn.btn-warning {
   transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
 }
+
 .btn.btn-warning:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0,0,0,.15);
