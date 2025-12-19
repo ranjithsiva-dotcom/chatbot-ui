@@ -1,6 +1,7 @@
 {
   "projects": {
-    "staging": "chatbot-ui2808"
+    "staging": "chatbot-ui2808",
+    "default": "chatbot-ui2809-664c5"
   },
   "targets": {},
   "etags": {}

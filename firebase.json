@@ -1,16 +1,13 @@
 {
   "hosting": {
-    "public": "dist/chatbot-non-standalone",
+    "public": "dist/chatbot-ui",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
     "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+      { "source": "**", "destination": "/index.html" }
     ]
   }
 }
